@@ -1,0 +1,30 @@
+/**
+     * 压缩视频
+     * @param convertFile  待转换的文件
+     * @param targetFile  转换后的目标文件
+     */
+    private   void toCompressFile(String convertFile,String targetFile){
+        try{
+            Runtime runtime = Runtime.getRuntime();
+            /**将视频压缩为 每秒15帧 平均码率600k 画面的宽与高 为1280*720*/
+            String cutCmd="ffmpeg -i " + convertFile + " -r 15 -b:v 600k  -s 1280x720 "+ targetFile;
+            runtime.exec(cutCmd);
+            System.out.println("文件："+convertFile+" 正在转换中。。。");
+        }catch(Exception e){
+            e.printStackTrace();
+            System.out.println("压缩文件出现异常："+e.getMessage());
+        }
+    }
+
+    public  void main(String[] ars ){
+        final String convertFile="G:\\QLDownload\\";
+        File f=new File(convertFile);
+        File[] fs=f.listFiles();
+        for(File ff:fs){
+            if(ff.getPath().toString().toLowerCase().endsWith(".mp4")){
+                String f1=convertFile+ff.getName();
+                String f2=convertFile+"压缩后_"+ff.getName();
+                toCompressFile(f1,f2);
+            }
+        }
+    }
